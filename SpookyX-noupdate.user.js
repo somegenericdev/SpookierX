@@ -42,7 +42,7 @@
 // ==/UserScript==
 
 if (GM_info === undefined) {
-	var GM_info = {script: {version: '32.50'}};
+	var GM_info = {script: {version: '32.51'}};
 }
 
 var settings = {
@@ -1300,6 +1300,21 @@ function delayedLoad(posts){
 		});
 	});
 }
+function loadImageWithRetry(imgElement, url, retries = 300000, delay = 1000) {
+    imgElement[0].onerror = function() {
+        if (retries > 0) {
+            console.warn(`Load failed for ${url}. Retrying in ${delay}ms... (${retries} retries left)`);
+            imgElement.src = "";
+            setTimeout(() => {
+                imgElement.src = url + "?retry=" + new Date().getTime();
+                loadImageWithRetry(imgElement, url, retries - 1, delay * 2);
+            }, delay);
+        } else {
+            console.error(`Failed to load image after multiple attempts: ${url}`);
+        }
+    };
+	imgElement.attr('src', url);
+}
 
 function inlineImages(posts){
 	posts.each(function(i, post){
@@ -1325,21 +1340,7 @@ function inlineImages(posts){
 					$currentImage.find('img').each(function(k, image){
 						var $image = $(image);
 						var thumbImage = $(image).attr('src');
-						$image.attr('src', fullImage);
-						$image.error(function(){ // Handle images that won't load
-							if (!$image.data('tried4pleb')) {
-								$image.data('tried4pleb', true);
-								var imgLink4pleb = fullImage.replace('data.archive.moe/board', 'img.4plebs.org/boards');
-								$image.attr('src', imgLink4pleb);
-								$image.parent().attr('href', imgLink4pleb); // Change link
-							} else if (!$image.data('triedThumb')) {
-								$image.data('triedThumb', true);
-								if (fullImage !== thumbImage) { // If the image has a thumbnail aka was 4chan native then use that
-									$image.attr('src', thumbImage);
-									$image.parent().attr('href', fullImage); // Reset link if changed to 4pleb attempt
-								}
-							}
-						});
+            			loadImageWithRetry($image, imgLink.href)
 						addHover($currentImage);
 					});
 				}
