@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name          SpookyX
+// @name          SpookierX
 // @description   Enhances functionality of FoolFuuka boards. Developed further for more comfortable ghost-posting on the moe archives.
-// @author        Fiddlekins
+// @author        somegenericdev
 // @version       32.51
-// @namespace     https://github.com/Fiddlekins/SpookyX
+// @namespace     https://github.com/somegenericdev/SpookierX
 // @include       http://archive.4plebs.org/*
 // @include       https://archive.4plebs.org/*
 // @include       http://archive.loveisover.me/*
