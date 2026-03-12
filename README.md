@@ -1,4 +1,4 @@
-# SpookyX
+# SpookierX
 Extend functionality on FoolFuuka imageboards.
 Only actually tested on the [moe archives](https://archive.moe) so the rest are theoretical.
 #### [Changelog](https://github.com/Fiddlekins/SpookyX/blob/master/CHANGELOG.md)
